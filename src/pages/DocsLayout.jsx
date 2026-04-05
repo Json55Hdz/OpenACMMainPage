@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { docsData as docs } from '../docsData';
-import { Menu, X, Terminal } from 'lucide-react';
-import { Search } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 
 export default function DocsLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,15 +23,12 @@ export default function DocsLayout() {
           </button>
 
           <Link to="/" className="flex items-center gap-3 font-bold text-xl tracking-tight text-white hover:opacity-90 transition-opacity">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <Terminal size={18} className="text-white" />
-            </div>
-            OpenACM
+            <img src="/logo.png" alt="OpenACM" className="h-10 w-auto" />
           </Link>
 
           <nav className="ml-auto flex items-center gap-8 text-sm font-medium">
             <Link to="/docs" className="text-blue-400 font-semibold">Docs</Link>
-            <a href="https://github.com/OpenACM" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+            <a href="https://github.com/Json55Hdz/OpenACM" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
               GitHub
             </a>
           </nav>
