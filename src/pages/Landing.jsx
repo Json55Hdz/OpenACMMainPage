@@ -1,6 +1,101 @@
-﻿import React from 'react';
-import { Terminal, Cpu, Shield, Globe, Zap, ArrowRight, Code, MessageSquare, Play, Package, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Terminal, Cpu, Shield, Globe, ArrowRight, Code, MessageSquare, Play, Package, Sparkles,
+  Bot, Workflow, Network, Plug, Brain, Mic, Clock, Layers, Copy, Check, BookOpen,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const VERSION = '0.4.7';
+const REPO_URL = 'https://github.com/Json55Hdz/OpenACM';
+
+const FEATURES = [
+  {
+    icon: <Terminal className="w-6 h-6 text-blue-400" />,
+    title: 'OS-Level Execution',
+    description: 'Runs shell commands, a persistent Python kernel and surgical code edits — with a real interactive terminal for every conversation.',
+  },
+  {
+    icon: <Globe className="w-6 h-6 text-cyan-400" />,
+    title: 'Browser Automation',
+    description: 'A persistent Playwright/Chromium browser that navigates, clicks, fills forms and extracts data across multiple steps.',
+  },
+  {
+    icon: <MessageSquare className="w-6 h-6 text-green-400" />,
+    title: 'Multi-Channel',
+    description: 'Web dashboard, terminal console, Telegram, Discord and WhatsApp (official Cloud API) — all sharing the same brain.',
+  },
+  {
+    icon: <Bot className="w-6 h-6 text-orange-400" />,
+    title: 'Agents',
+    description: 'Specialized assistants with their own prompt, tool allowlist, knowledge base, memory policy and their own Telegram bot or WhatsApp number.',
+  },
+  {
+    icon: <Workflow className="w-6 h-6 text-pink-400" />,
+    title: 'Visual Flows & Webhooks',
+    description: 'Node-based flows (HTTP, conditions, loops, WooCommerce) that agents call as tools — or that run from signed public webhooks.',
+  },
+  {
+    icon: <Network className="w-6 h-6 text-purple-400" />,
+    title: 'Multi-Agent Swarms',
+    description: 'Give a goal to a team of AI workers that plan, share knowledge and execute tasks in parallel.',
+  },
+  {
+    icon: <Plug className="w-6 h-6 text-indigo-400" />,
+    title: 'MCP & Plugins',
+    description: 'Connect any Model Context Protocol server, or use plugins like Gmail Classifier, Home Assistant and Content Automation.',
+  },
+  {
+    icon: <Brain className="w-6 h-6 text-rose-400" />,
+    title: 'Long-Term Memory',
+    description: 'ChromaDB RAG memory across conversations, automatic context compaction, and Code Resurrection over your old projects.',
+  },
+  {
+    icon: <Layers className="w-6 h-6 text-sky-400" />,
+    title: 'Any LLM',
+    description: 'OpenAI, Anthropic, Gemini, xAI, OpenRouter, OpenCode Go, Ollama, any OpenAI-compatible endpoint — or your logged-in Claude/Gemini CLI.',
+  },
+  {
+    icon: <Clock className="w-6 h-6 text-yellow-400" />,
+    title: 'Cron & Routines',
+    description: 'Scheduled jobs, activity-based routine detection and workflow suggestions that automate what you repeat.',
+  },
+  {
+    icon: <Mic className="w-6 h-6 text-teal-400" />,
+    title: 'Voice',
+    description: 'Optional always-on voice daemon (faster-whisper + wake word) and in-browser Kokoro text-to-speech.',
+  },
+  {
+    icon: <Shield className="w-6 h-6 text-emerald-400" />,
+    title: 'Local, Private & Guarded',
+    description: 'Self-hosted, token-protected dashboard, encrypted conversations, and confirmation / whitelist / yolo execution modes.',
+  },
+];
+
+const INSTALL_OPTIONS = [
+  {
+    title: 'npm CLI (recommended)',
+    note: 'Requires Node.js 18+ and git. Installs into ~/OpenACM.',
+    commands: 'npm i -g open-acm\nopenacm install\nopenacm start',
+  },
+  {
+    title: 'One-liner',
+    note: 'Linux / macOS — on Windows use install.ps1 from an admin PowerShell.',
+    commands: 'curl -fsSL https://raw.githubusercontent.com/Json55Hdz/OpenACM/main/install.sh | bash',
+  },
+  {
+    title: 'Docker',
+    note: 'Set web.host 0.0.0.0 / web.port 8080 in config/local.yaml first — see the Docker guide.',
+    commands: 'git clone https://github.com/Json55Hdz/OpenACM.git && cd OpenACM\ndocker compose -f docker/docker-compose.yml up -d --build\ndocker logs openacm',
+  },
+];
+
+const REQUIREMENTS = [
+  { label: 'Python', value: '3.12+' },
+  { label: 'Node.js', value: '20+' },
+  { label: 'RAM', value: '8 GB Windows · 3 GB Linux' },
+  { label: 'CPU', value: '2+ cores (3+ recommended)' },
+  { label: 'Dashboard', value: 'http://127.0.0.1:47821' },
+];
 
 function Landing() {
   return (
@@ -12,13 +107,13 @@ function Landing() {
             <img src="/logo.png" alt="OpenACM" className="h-10 w-auto" />
           </Link>
           <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
-
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#install" className="hover:text-white transition-colors">Install</a>
             <Link to="/docs" className="hover:text-white transition-colors">Documentation</Link>
-            <a href="https://github.com/Json55Hdz/OpenACM" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
           </div>
           <div className="flex items-center gap-4">
-
-            <Link to="/docs" className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+            <Link to="/docs/02-getting-started" className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
               Get Started
             </Link>
           </div>
@@ -36,7 +131,7 @@ function Landing() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-sm text-blue-400 mb-8">
               <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
-              Level 1 Autonomous Agent
+              v{VERSION} · Tier-1 Autonomous Agent · MIT
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
               Stop describing. <br />
@@ -45,13 +140,14 @@ function Landing() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              OpenACM is a local, autonomous AI agent that doesn't just give you instructions — it executes them. With direct OS access, browser automation, and multi-channel support.
+              OpenACM is a self-hosted, autonomous AI agent that doesn't just give you instructions — it executes them.
+              Direct OS access, browser automation, agents with their own channels, visual flows, swarms and MCP — all from one web dashboard.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/docs" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
                 Read the Docs <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="https://github.com/Json55Hdz/OpenACM" target="_blank" rel="noreferrer" className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 border border-slate-700">
+              <a href={REPO_URL} target="_blank" rel="noreferrer" className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 border border-slate-700">
                 <Code className="w-4 h-4" /> View Source
               </a>
             </div>
@@ -70,26 +166,26 @@ function Landing() {
               </div>
               <div className="p-6 font-mono text-sm md:text-base text-slate-300 space-y-4">
                 <div className="flex gap-4">
-                  <span className="text-blue-400 shrink-0">âžœ</span>
+                  <span className="text-blue-400 shrink-0">➜</span>
                   <span className="text-slate-100">User: "Create a React app, install tailwind, and start the server."</span>
                 </div>
                 <div className="flex gap-4 opacity-80">
-                  <span className="text-slate-500 shrink-0">âš™</span>
+                  <span className="text-slate-500 shrink-0">⚙</span>
                   <span className="text-cyan-400">Thinking: I need to run shell commands to bootstrap the project.</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-green-400 shrink-0">âš¡</span>
+                  <span className="text-green-400 shrink-0">⚡</span>
                   <div>
-                    <span className="text-slate-400">Executing: </span>
+                    <span className="text-slate-400">run_command: </span>
                     <span className="text-yellow-300">npx create-vite my-app --template react && cd my-app && npm install tailwindcss</span>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-green-400 shrink-0">âœ“</span>
-                  <span className="text-slate-300">Dependencies installed successfully. Starting dev server...</span>
+                  <span className="text-green-400 shrink-0">✓</span>
+                  <span className="text-slate-300">Approved in the dashboard · dependencies installed. Starting dev server...</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-green-400 shrink-0">ðŸš€</span>
+                  <span className="text-green-400 shrink-0">➤</span>
                   <span className="text-slate-300">Server running at <span className="text-green-400">http://localhost:5173</span></span>
                 </div>
               </div>
@@ -99,46 +195,51 @@ function Landing() {
       </main>
 
       {/* Features Section */}
-      <section className="relative py-24 border-t border-slate-800/60">
+      <section id="features" className="relative py-24 border-t border-slate-800/60 scroll-mt-16">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 to-slate-900/50"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Built for Real Work</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">Not just another chatbot. OpenACM can actually do things on your system.</p>
+            <p className="text-slate-400 max-w-2xl mx-auto">Not just another chatbot. OpenACM can actually do things on your system — and keeps doing them on a schedule, on your channels, or when a webhook fires.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard 
-              icon={<Terminal className="w-6 h-6 text-blue-400" />}
-              title="OS-Level Execution"
-              description="Run shell commands, manage files, and control your system directly through natural language."
-            />
-            <FeatureCard 
-              icon={<Cpu className="w-6 h-6 text-purple-400" />}
-              title="Local & Private"
-              description="Everything runs on your machine. No data leaves your system unless you explicitly allow it."
-            />
-            <FeatureCard 
-              icon={<Globe className="w-6 h-6 text-cyan-400" />}
-              title="Browser Automation"
-              description="Control browsers, scrape data, fill forms, and interact with web apps automatically."
-            />
-            <FeatureCard 
-              icon={<Shield className="w-6 h-6 text-emerald-400" />}
-              title="Secure by Design"
-              description="Sandboxed execution environment with clear permission boundaries and audit logs."
-            />
-            <FeatureCard 
-              icon={<Zap className="w-6 h-6 text-yellow-400" />}
-              title="Multi-Channel"
-              description="Interact via CLI, Discord, Slack, or the web interface — your choice."
-            />
-            <FeatureCard 
-              icon={<Code className="w-6 h-6 text-pink-400" />}
-              title="Extensible"
-              description="Add custom tools and integrations. OpenACM adapts to your workflow."
-            />
+            {FEATURES.map((feature) => (
+              <FeatureCard key={feature.title} {...feature} />
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Install Section */}
+      <section id="install" className="py-24 border-t border-slate-800/60 scroll-mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Install in minutes</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Setup installs uv, Python 3.12, Node 20, the dependencies and Chromium. On first start, open the dashboard, paste the token printed in the terminal and pick your LLM provider.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            {INSTALL_OPTIONS.map((option) => (
+              <InstallCard key={option.title} {...option} />
+            ))}
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-5 gap-4">
+            {REQUIREMENTS.map((req) => (
+              <div key={req.label} className="rounded-lg border border-slate-800/60 bg-slate-900/30 px-4 py-3">
+                <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">{req.label}</div>
+                <div className="text-sm text-slate-200 font-medium">{req.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-sm text-slate-500">
+            Update anytime with <code className="text-blue-300">openacm update</code> (or <code className="text-blue-300">./update.sh</code> / <code className="text-blue-300">update.bat</code>).{' '}
+            <Link to="/docs/02-getting-started" className="text-blue-400 hover:underline">Full installation guide →</Link>
+          </p>
         </div>
       </section>
 
@@ -148,12 +249,12 @@ function Landing() {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to stop typing commands?</h2>
           <p className="text-slate-400 mb-8 text-lg">Get started with OpenACM in minutes. It's free and open source.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/docs" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+            <Link to="/docs/02-getting-started" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
               <Play className="w-4 h-4" /> Quick Start
             </Link>
-            <a href="https://github.com/Json55Hdz/OpenACM" target="_blank" rel="noreferrer" className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 border border-slate-700">
-              <Package className="w-4 h-4" /> Installation
-            </a>
+            <Link to="/docs/32-docker" className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-8 py-3.5 rounded-lg font-medium transition-all flex items-center justify-center gap-2 border border-slate-700">
+              <Package className="w-4 h-4" /> Run with Docker
+            </Link>
           </div>
         </div>
       </section>
@@ -172,7 +273,7 @@ function Landing() {
                 Site Created by OpenACM (AI Agent)
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                This entire landing page — including the documentation system, design, and all 20+ docs — was built, written, and deployed entirely by OpenACM (the AI Agent itself). From generating the React components to populating the docs from Markdown files, building the production bundle, and uploading it to the server. The agent handled everything autonomously.
+                This landing page and its documentation system were built by OpenACM itself — from generating the React components to turning the project's Markdown docs into these pages and building the production bundle.
               </p>
             </div>
           </div>
@@ -185,16 +286,20 @@ function Landing() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <img src="/logo.png" alt="OpenACM" className="h-8 w-auto" />
+              <span className="text-slate-500 text-sm">v{VERSION}</span>
             </div>
             <p className="text-slate-500 text-sm">
-              Â© {new Date().getFullYear()} OpenACM. Open source under MIT License.
+              © {new Date().getFullYear()} Jeison Hernandez (JsonProductions). Open source under the MIT License.
             </p>
             <div className="flex gap-6">
-              <a href="https://github.com/OpenACM" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors">
+              <a href={REPO_URL} target="_blank" rel="noreferrer" aria-label="GitHub repository" className="text-slate-400 hover:text-white transition-colors">
                 <Code className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
-                <MessageSquare className="w-5 h-5" />
+              <Link to="/docs" aria-label="Documentation" className="text-slate-400 hover:text-white transition-colors">
+                <BookOpen className="w-5 h-5" />
+              </Link>
+              <a href="https://www.npmjs.com/package/open-acm" target="_blank" rel="noreferrer" aria-label="npm package" className="text-slate-400 hover:text-white transition-colors">
+                <Cpu className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -212,6 +317,33 @@ function FeatureCard({ icon, title, description }) {
       </div>
       <h3 className="font-semibold text-lg mb-2">{title}</h3>
       <p className="text-slate-400 text-sm leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+function InstallCard({ title, note, commands }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(commands);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 overflow-hidden flex flex-col">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-slate-800/60 bg-slate-950/60">
+        <h3 className="font-semibold text-slate-100">{title}</h3>
+        <button
+          onClick={handleCopy}
+          className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 bg-slate-800/70 hover:bg-slate-700 px-2.5 py-1 rounded-md text-xs"
+        >
+          {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+      <pre className="px-5 py-4 text-sm font-mono text-yellow-200 whitespace-pre-wrap break-all flex-1">{commands}</pre>
+      <p className="px-5 pb-4 text-xs text-slate-500">{note}</p>
     </div>
   );
 }
