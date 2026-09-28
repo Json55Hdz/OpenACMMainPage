@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { docsData as docs } from '../docsData';
+import { docsData as docs, docSections } from '../docsData';
 import { Menu, X, Search } from 'lucide-react';
 
 export default function DocsLayout() {
@@ -8,17 +8,30 @@ export default function DocsLayout() {
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
-  const filteredDocs = docs.filter(doc => 
-    doc.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    doc.content.toLowerCase().includes(searchQuery.toLowerCase())
+  const query = searchQuery.trim().toLowerCase();
+  const filteredDocs = docs.filter(doc =>
+    !query ||
+    doc.title.toLowerCase().includes(query) ||
+    doc.content.toLowerCase().includes(query)
   );
+
+  // Group docs by sidebar section, keeping the order produced by update_docs.py.
+  const sections = docSections
+    .map(section => ({ section, items: filteredDocs.filter(doc => doc.section === section) }))
+    .filter(group => group.items.length > 0);
+  const ungrouped = filteredDocs.filter(doc => !docSections.includes(doc.section));
+  if (ungrouped.length > 0) sections.push({ section: 'More', items: ungrouped });
 
   return (
     <div className="min-h-screen bg-[#0a0f1c] text-slate-200 flex flex-col font-sans selection:bg-blue-500/30">
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#0a0f1c]/80 border-b border-slate-800/60 shadow-sm">
         <div className="flex h-16 items-center px-4 md:px-8 max-w-[1600px] mx-auto w-full">
-          <button className="md:hidden mr-4 text-slate-400 hover:text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <button
+            className="md:hidden mr-4 text-slate-400 hover:text-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
@@ -39,8 +52,6 @@ export default function DocsLayout() {
         {/* Left Sidebar */}
         <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-[#0a0f1c] border-r border-slate-800/60 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-16 md:h-[calc(100vh-4rem)] pt-16 md:pt-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="h-full overflow-y-auto px-4 py-8 pb-20 custom-scrollbar">
-            <h4 className="mb-4 px-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Documentation</h4>
-
             {/* Search Bar */}
             <div className="relative mb-6 px-2">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -55,25 +66,34 @@ export default function DocsLayout() {
               />
             </div>
 
-            <div className="space-y-1 border-l border-slate-800/60 ml-2">
-              {filteredDocs.map((doc) => {
-                const isActive = location.pathname === `/docs/${doc.slug}`;
-                return (
-                  <Link
-                    key={doc.slug}
-                    to={`/docs/${doc.slug}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block pl-4 py-2 text-sm transition-all border-l-2 -ml-[1px] ${
-                      isActive
-                        ? 'border-blue-500 text-blue-400 font-medium bg-blue-500/5 rounded-r-md'
-                        : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600 hover:bg-slate-800/20 rounded-r-md'
-                    }`}
-                  >
-                    {doc.title}
-                  </Link>
-                );
-              })}
-            </div>
+            {sections.length === 0 && (
+              <p className="px-2 text-sm text-slate-500">No documents match “{searchQuery}”.</p>
+            )}
+
+            {sections.map(({ section, items }) => (
+              <div key={section} className="mb-8">
+                <h4 className="mb-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-widest">{section}</h4>
+                <div className="space-y-1 border-l border-slate-800/60 ml-2">
+                  {items.map((doc) => {
+                    const isActive = location.pathname === `/docs/${doc.slug}`;
+                    return (
+                      <Link
+                        key={doc.slug}
+                        to={`/docs/${doc.slug}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`block pl-4 py-2 text-sm transition-all border-l-2 -ml-[1px] ${
+                          isActive
+                            ? 'border-blue-500 text-blue-400 font-medium bg-blue-500/5 rounded-r-md'
+                            : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600 hover:bg-slate-800/20 rounded-r-md'
+                        }`}
+                      >
+                        {doc.title}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </aside>
 
@@ -85,7 +105,9 @@ export default function DocsLayout() {
         {/* Main Content Area */}
         <main className="flex-1 min-w-0 px-4 sm:px-8 md:px-12 py-8 md:py-12 lg:flex gap-12 justify-center">
           <div className="flex-auto max-w-6xl w-full">
-            <Outlet />
+            <Suspense fallback={null}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>
