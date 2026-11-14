@@ -110,6 +110,7 @@ function Landing() {
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#install" className="hover:text-white transition-colors">Install</a>
             <Link to="/docs" className="hover:text-white transition-colors">Documentation</Link>
+            <Link to="/plugins" className="hover:text-white transition-colors">Plugins</Link>
             <a href={REPO_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
           </div>
           <div className="flex items-center gap-4">
@@ -208,6 +209,17 @@ function Landing() {
               <FeatureCard key={feature.title} {...feature} />
             ))}
           </div>
+
+          <Link
+            to="/plugins"
+            className="mt-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-blue-500/40 transition-colors"
+          >
+            <span>
+              <span className="block font-semibold text-lg mb-1">Plugin marketplace</span>
+              <span className="block text-slate-400 text-sm">Add browser control, smart-home devices and more. Install a plugin in your OpenACM with one click.</span>
+            </span>
+            <span className="text-blue-400 text-sm font-medium shrink-0">Browse plugins →</span>
+          </Link>
         </div>
       </section>
 

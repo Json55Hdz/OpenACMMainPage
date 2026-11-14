@@ -7,6 +7,7 @@ import Landing from './pages/Landing';
 const DocsLayout = lazy(() => import('./pages/DocsLayout'));
 const DocPage = lazy(() => import('./pages/DocPage'));
 const DocsIndex = lazy(() => import('./pages/DocsIndex'));
+const Plugins = lazy(() => import('./pages/Plugins'));
 
 function Loading() {
   return <div className="min-h-screen bg-[#0a0f1c]" />;
@@ -17,6 +18,7 @@ export default function App() {
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/plugins" element={<Plugins />} />
         <Route path="/docs" element={<DocsLayout />}>
           <Route index element={<DocsIndex />} />
           <Route path=":slug" element={<DocPage />} />
