@@ -3,12 +3,16 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
 import DocsLayout from './pages/DocsLayout';
 import DocPage from './pages/DocPage';
+import Library from './pages/Library';
+import Plugins from './pages/Plugins';
 import { docsData } from './docsData';
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/library" element={<Library />} />
+      <Route path="/plugins" element={<Plugins />} />
       <Route path="/docs" element={<DocsLayout />}>
         <Route index element={<Navigate to={`/docs/${docsData[0]?.slug}`} replace />} />
         <Route path=":slug" element={<DocPage />} />

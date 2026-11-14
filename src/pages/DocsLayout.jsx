@@ -28,6 +28,7 @@ export default function DocsLayout() {
 
           <nav className="ml-auto flex items-center gap-8 text-sm font-medium">
             <Link to="/docs" className="text-blue-400 font-semibold">Docs</Link>
+            <Link to="/plugins" className="text-slate-400 hover:text-white transition-colors">Plugins</Link>
             <a href="https://github.com/Json55Hdz/OpenACM" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
               GitHub
             </a>

@@ -1,0 +1,20 @@
+[
+    {
+        "id": "skill-1",
+        "name": "Web Scraper",
+        "description": "Scrapes content from any webpage with ease.",
+        "author": "JsonProductions",
+        "version": "1.0.0",
+        "category": "Automation",
+        "icon": "globe"
+    },
+    {
+        "id": "skill-2",
+        "name": "Data Analyzer",
+        "description": "Analyzes large datasets and generates reports.",
+        "author": "OpenACM",
+        "version": "1.1.0",
+        "category": "Data Science",
+        "icon": "bar-chart"
+    }
+]

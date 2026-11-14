@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.fullstack
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - openacm-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/src:/app/src
+    networks:
+      - openacm-network
+
+networks:
+  openacm-network:
+    driver: bridge
